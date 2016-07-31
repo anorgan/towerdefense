@@ -26,10 +26,9 @@ public class Tower : MonoBehaviour
         }
 
         Vector3 direction = currentEnemy.transform.position - this.transform.position;
-
         Vector3 rotation = Quaternion.Lerp(rotatingPart.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 10f).eulerAngles;
 
-
+        rotatingPart.transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
     }
 
     GameObject GetClosestEnemy()
