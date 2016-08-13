@@ -3,8 +3,16 @@ using System.Collections;
 
 public class Tower : MonoBehaviour
 {
+    [Header("Settings")]
     public float range = 1f;
+    public float fireRate = 1f;
+    private float fireCountdown = 0f;
+    private int timesFired = 0;
+
+    [Header("Objects")]
     public GameObject rotatingPart;
+    public GameObject missilePrefab;
+    public Transform firePoint;
 
     GameObject currentEnemy = null;
 
@@ -29,6 +37,40 @@ public class Tower : MonoBehaviour
         Vector3 rotation = Quaternion.Lerp(rotatingPart.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 10f).eulerAngles;
 
         rotatingPart.transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+        if (fireCountdown <= 0f)
+        {
+            Shoot();
+            fireCountdown = 1f / fireRate;
+        }
+
+        fireCountdown -= Time.deltaTime;
+    }
+
+    void Shoot()
+    {
+        if (currentEnemy == null)
+        {
+            return;
+        }
+
+        Vector3 fireSlotOffset = new Vector3(timesFired * -.2f, timesFired * -.2f, 0f);
+
+        if (timesFired < 4)
+        {
+            timesFired++;
+        } else
+        {
+            timesFired = 0;
+        }
+
+        GameObject missileGO = (GameObject) Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+        Missile missile = missileGO.GetComponent<Missile>();
+
+        if (missile != null)
+        {
+            missile.Seek(currentEnemy.transform);
+        }
     }
 
     GameObject GetClosestEnemy()

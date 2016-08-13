@@ -13,6 +13,7 @@ public class Waypoints : MonoBehaviour
         for (int i = 0; i < nodes.Length; i++)
         {
             nodes[i] = transform.GetChild(i);
+            nodes[i].GetComponent<Renderer>().enabled = false;
         }
     }
 }
