@@ -27,4 +27,9 @@ public class BuildManager : MonoBehaviour
     {
         return turretToBuild;
     }
+
+    public void SetTurretToBuild(GameObject turret)
+    {
+        turretToBuild = turret;
+    }
 }

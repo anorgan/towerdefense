@@ -10,11 +10,21 @@ public class Platform : MonoBehaviour {
 
     private GameObject turret;
 
-    GameObject towerMenu;
+    public Canvas towerMenu;
+
+    public void BuildTurret()
+    {
+        GameObject turretToBuild = BuildManager.instance.GetTurretToBuild();
+        Vector3 offset = new Vector3(0f, -.7f, 0f);
+        turret = (GameObject)Instantiate(turretToBuild, transform.position + offset, transform.rotation);
+
+        towerMenu.GetComponent<Canvas>().enabled = false;
+    }
 
 	void Start ()
     {
         rend = platformGO.GetComponent<Renderer>();
+        towerMenu.GetComponent<Canvas>().enabled = false;
         defaultColor = rend.material.color;
     }
 
@@ -26,13 +36,13 @@ public class Platform : MonoBehaviour {
             return;
         }
 
-        GameObject turretToBuild = BuildManager.instance.GetTurretToBuild();
-        Vector3 offset = new Vector3(0f, -.7f, 0f);
-        turret = (GameObject) Instantiate(turretToBuild, transform.position + offset, transform.rotation);
-
         rend.enabled = false;
 
-        // towerMenu.SetActive(true);
+        // Display menu
+        towerMenu.GetComponent<Canvas>().enabled = true;
+
+        // Should be called on button click
+        BuildTurret();
     }
 
     void OnMouseEnter()
